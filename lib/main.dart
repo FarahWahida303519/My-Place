@@ -1,4 +1,4 @@
-// -------------------- IMPORTS --------------------
+//import
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -57,8 +57,10 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
           child: Column(
             children: [
               const SizedBox(height: 10),
+
               if (isLoading)
                 CircularProgressIndicator(), //loading progress will be run when system run and retrieve a data
+              //ERROR
               if (!isLoading && errorMessage.isNotEmpty)
                 Column(
                   children: [
@@ -74,7 +76,15 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                     ),
                   ],
                 ),
+                
+              // NO DATA UI 
+              if (!isLoading && errorMessage.isEmpty && places.isEmpty)
+                const Text(
+                  "No data available.",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
 
+              //Display Data when data exixts
               if (!isLoading && errorMessage.isEmpty)
                 Expanded(
                   child: ListView.builder(
@@ -153,8 +163,6 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-
-                                      
                                       // RATING BOX
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -176,7 +184,6 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                         ),
                                       ),
 
-
                                       // ShowDialog
                                       ElevatedButton(
                                         onPressed: () {
@@ -184,7 +191,12 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
-                                                backgroundColor: Color.fromARGB(255, 253, 245, 247),
+                                                backgroundColor: Color.fromARGB(
+                                                  255,
+                                                  253,
+                                                  245,
+                                                  247,
+                                                ),
                                                 title: Text(
                                                   p.name,
                                                   style: const TextStyle(
@@ -194,11 +206,16 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
 
                                                 content: SingleChildScrollView(
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment .start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Center(
                                                         child: ClipRRect(
-                                                          borderRadius:BorderRadius.circular( 15,),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                15,
+                                                              ),
                                                           child: Image.network(
                                                             p.imageUrl,
                                                             height: 200,
@@ -212,6 +229,9 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                         height: 15,
                                                       ),
                                                       Text("ID : ${p.id}"),
+                                                      Text(
+                                                        "Category : ${p.category}",
+                                                      ),
                                                       Text("State: ${p.state}"),
                                                       Text(
                                                         "Category: ${p.category}",
@@ -303,76 +323,79 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
 
   // Reuest API
   Future<void> loadPlaces() async {
-  // Start loading
-  setState(() {
-    isLoading = true;
-    errorMessage = "";
-    places = [];
-  });
+    // Start loading
+    setState(() {
+      isLoading = true;
+      errorMessage = "";
+      places = [];
+    });
 
-  try {
-    // Prepare URL
-    Uri url = Uri.parse(
-      "https://slumberjer.com/teaching/a251/locations.php?state=&category=&name=",
-    );
+    try {
+      // Prepare URL
+      Uri url = Uri.parse(
+        "https://slumberjer.com/teaching/a251/locations.php?state=&category=&name=",
+      );
 
-    // GET request with timeout
-    var response = await http.get(url).timeout(
-      const Duration(seconds: 10),
-      onTimeout: () {
-        // If the API takes too long
-        errorMessage = "Connection Timeout. Please try again.";
+      // GET request with timeout
+      var response = await http
+          .get(url)
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              // If the API takes too long
+              errorMessage = "Connection Timeout. Please try again.";
+
+              setState(() {
+                isLoading = false;
+              });
+
+              return http.Response("Timeout", 408);
+            },
+          );
+
+      // If the server returns an error
+      if (response.statusCode != 200) {
+        errorMessage =
+            "Server Error: ${response.statusCode}. Unable to connect. Please check your internet connection.";
 
         setState(() {
           isLoading = false;
         });
 
-        return http.Response("Timeout", 408);
-      },
-    );
-
-    // If the server returns an error
-    if (response.statusCode != 200) {
-      errorMessage = "Server Error: ${response.statusCode}. Unable to connect. Please check your internet connection.";
-
-      setState(() {
-        isLoading = false;
-      });
-
-      return;
-    }
-
-    // Decode JSON response
-    var decoded = json.decode(response.body);
-
-    if (decoded is List) {
-      // Prevent duplicate data
-      places = [];
-
-      for (int i = 0; i < decoded.length; i++) {
-        var element = decoded[i];
-        Place place = Place.fromJson(element);
-        places.add(place);
+        return;
       }
 
-      if (places.isEmpty) {
-        errorMessage = "No data found.";
+      // Decode JSON response
+      var decoded = json.decode(response.body);
+
+      if (decoded is List) {
+        // Prevent duplicate data
+        places = [];
+
+        for (int i = 0; i < decoded.length; i++) {
+          var element = decoded[i];
+          Place place = Place.fromJson(element);
+          places.add(place);
+        }
+
+        if (places.isEmpty) {
+          errorMessage = "No data found.";
+        }
+      } else {
+        // Invalid format
+        errorMessage = "Invalid data format.";
       }
-    } else {
-      // Invalid format
-      errorMessage = "Invalid data format.";
+    } catch (e) {
+      // Generic connection or API failure
+      errorMessage =
+          "Unable to connect. Please check your internet connection.";
     }
-  } catch (e) {
-    // Generic connection or API failure
-    errorMessage = "Unable to connect. Please check your internet connection.";
+
+    // Finish loading
+    setState(() {
+      isLoading = false;
+    });
   }
-
-  // Finish loading
-  setState(() {
-    isLoading = false;
-  });
-}
-
 
   String ratingLabel(double r) {
     //method convert num into label
