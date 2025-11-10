@@ -75,7 +75,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                     ),
                   ],
                 ),
-                
+
               // NO DATA UI 
               if (!isLoading && errorMessage.isEmpty && places.isEmpty)
                 const Text(
@@ -162,10 +162,6 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-<<<<<<< HEAD
-=======
-  
->>>>>>> 527031dd6cf4ff70066d4a95707e73ee1ac3dfc0
                                       // RATING BOX
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -232,13 +228,9 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                         height: 15,
                                                       ),
                                                       Text("ID : ${p.id}"),
-<<<<<<< HEAD
                                                       Text(
                                                         "Category : ${p.category}",
                                                       ),
-=======
-                                                      Text("Category : ${p.category}"),
->>>>>>> 527031dd6cf4ff70066d4a95707e73ee1ac3dfc0
                                                       Text("State: ${p.state}"),
                                                       Text(
                                                         "Category: ${p.category}",
@@ -397,21 +389,11 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
       errorMessage =
           "Unable to connect. Please check your internet connection.";
     }
-
     // Finish loading
     setState(() {
       isLoading = false;
     });
   }
-
-<<<<<<< HEAD
-=======
-  // Finish loading
-  setState(() {
-    isLoading = false;
-  });
-}
->>>>>>> 527031dd6cf4ff70066d4a95707e73ee1ac3dfc0
   String ratingLabel(double r) {
     //method convert num into label
     if (r >= 4.5) return "Excellent";
