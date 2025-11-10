@@ -88,8 +88,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
               if (!isLoading && errorMessage.isEmpty)
                 Expanded(
                   child: ListView.builder(
-                    itemCount: places
-                        .length, //it will total num of item when to display based on api data
+                    itemCount: places .length, //it will total num of item when to display based on api data
                     itemBuilder: (context, index) {
                       final p =
                           places[index]; //p hold data like name,image,rating,contact basedd on api
@@ -115,8 +114,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // IMAGE
-                            ClipRRect(
-                              //I use ClipRRect because i want to display the image inside dialog with rounded
+                            ClipRRect(// display the image inside dialog with rounded
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(12),
                               ),
@@ -125,8 +123,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                 height: 180,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  //if the image fail to load, the function will show the broken image icon
+                                errorBuilder: (context, error, stackTrace) { //if the image fail to load, the function will show the broken image icon
                                   return Icon(Icons.broken_image, size: 80);
                                 },
                               ),
