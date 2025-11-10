@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-//import
-=======
->>>>>>> 527031dd6cf4ff70066d4a95707e73ee1ac3dfc0
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
