@@ -55,7 +55,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
           width: width,
           child: Column(
             children: [
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
 
               if (isLoading)
                 CircularProgressIndicator(), //loading progress will be run when system run and retrieve a data
@@ -68,17 +68,18 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 16),
                     ),
-                    const SizedBox(height: 8),
+
+                    SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: loadPlaces, //calling method  loadPlaces
-                      child: const Text("Retry"),
+                      child: Text("Retry"),
                     ),
                   ],
                 ),
 
-              // NO DATA UI 
+              // NO DATA UI
               if (!isLoading && errorMessage.isEmpty && places.isEmpty)
-                const Text(
+                Text(
                   "No data available.",
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
@@ -101,7 +102,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
+                          boxShadow: [
                             BoxShadow(
                               color: Colors.black12,
                               blurRadius: 6,
@@ -116,7 +117,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                             // IMAGE
                             ClipRRect(
                               //I use ClipRRect because i want to display the image inside dialog with rounded
-                              borderRadius: const BorderRadius.vertical(
+                              borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(12),
                               ),
                               child: Image.network(
@@ -126,23 +127,20 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   //if the image fail to load, the function will show the broken image icon
-                                  return const Icon(
-                                    Icons.broken_image,
-                                    size: 80,
-                                  );
+                                  return Icon(Icons.broken_image, size: 80);
                                 },
                               ),
                             ),
 
                             // CONTENT
                             Padding(
-                              padding: const EdgeInsets.all(12),
+                              padding: EdgeInsets.all(12),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     p.name, //display name from api data
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -151,12 +149,13 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                   const SizedBox(height: 4),
                                   Text(
                                     p.state, //display state from api data
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 14,
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+
+                                  SizedBox(height: 10),
 
                                   Row(
                                     mainAxisAlignment:
@@ -164,20 +163,19 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                     children: [
                                       // RATING BOX
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
+                                        padding: EdgeInsets.symmetric(
                                           horizontal: 10,
                                           vertical: 4,
                                         ),
                                         decoration: BoxDecoration(
                                           color: Colors.yellow.shade700,
-                                          borderRadius: BorderRadius.circular(
-                                            6,
-                                          ),
+                                          borderRadius: BorderRadius.circular( 6, ),
                                         ),
                                         child: Row(
                                           children: [
                                             Text(p.rating.toStringAsFixed(1)),
-                                            const SizedBox(width: 6),
+                                            
+                                             SizedBox(width: 6),
                                             Text(ratingLabel(p.rating)),
                                           ],
                                         ),
@@ -190,15 +188,10 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
-                                                backgroundColor: Color.fromARGB(
-                                                  255,
-                                                  253,
-                                                  245,
-                                                  247,
-                                                ),
+                                                backgroundColor: Color.fromARGB( 255, 253,245,247,),
                                                 title: Text(
                                                   p.name,
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
@@ -216,10 +209,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                                 15,
                                                               ),
                                                           child: Image.network(
-                                                            p.imageUrl,
-                                                            height: 200,
-                                                            width: 260,
-                                                            fit: BoxFit.cover,
+                                                            p.imageUrl,height: 200,width: 260, fit: BoxFit.cover,
                                                           ),
                                                         ),
                                                       ),
@@ -242,23 +232,18 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                       const SizedBox(
                                                         height: 10,
                                                       ),
-                                                      const Text(
+                                                      Text(
                                                         "Description:",
                                                         style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                          fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
                                                       Text(
-                                                        p.description.isEmpty
-                                                            ? "-"
-                                                            : p.description,
+                                                        p.description.isEmpty? "-": p.description,
                                                       ),
 
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      const Text(
+                                                      SizedBox(height: 10),
+                                                      Text(
                                                         "Contact:",
                                                         style: TextStyle(
                                                           fontWeight:
@@ -266,15 +251,10 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                         ),
                                                       ),
                                                       Text(
-                                                        p.contact.isEmpty
-                                                            ? "-"
-                                                            : p.contact,
-                                                      ),
+                                                        p.contact.isEmpty? "-" : p.contact,),
 
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      const Text(
+                                                      SizedBox(height: 10),
+                                                      Text(
                                                         "Location:",
                                                         style: TextStyle(
                                                           fontWeight:
@@ -293,14 +273,14 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                     },
-                                                    child: const Text("Close"),
+                                                    child: Text("Close"),
                                                   ),
                                                 ],
                                               );
                                             },
                                           );
                                         },
-                                        child: const Text("View Detail"),
+                                        child:  Text("View Detail"),
                                       ),
                                     ],
                                   ),
@@ -394,6 +374,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
       isLoading = false;
     });
   }
+
   String ratingLabel(double r) {
     //method convert num into label
     if (r >= 4.5) return "Excellent";
