@@ -153,8 +153,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-
-                                      
+  
                                       // RATING BOX
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -212,6 +211,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                         height: 15,
                                                       ),
                                                       Text("ID : ${p.id}"),
+                                                      Text("Category : ${p.category}"),
                                                       Text("State: ${p.state}"),
                                                       Text(
                                                         "Category: ${p.category}",
@@ -372,8 +372,6 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
     isLoading = false;
   });
 }
-
-
   String ratingLabel(double r) {
     //method convert num into label
     if (r >= 4.5) return "Excellent";
