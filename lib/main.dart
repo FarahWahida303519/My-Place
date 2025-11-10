@@ -303,72 +303,76 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
 
   // Reuest API
   Future<void> loadPlaces() async {
-    setState(() {
-      //refresh ui
-      isLoading = true; //display the loading indicator
-      errorMessage = ""; //clear error mesg
-      places = []; //empty list before loading new data
-    });
+  // Start loading
+  setState(() {
+    isLoading = true;
+    errorMessage = "";
+    places = [];
+  });
 
-    try {
-      //send GET request to Api and wait for response
-      var response = await http
-          .get(
-            Uri.parse(
-              "https://slumberjer.com/teaching/a251/locations.php?state=&category=&name=",
-            ),
-          )
-          .timeout(
-            const Duration(seconds: 10), //wait 10 sec
-            onTimeout: () {
-              //to handle if api timeout
-              errorMessage = "Connection Timeout.";
-              setState(() {
-                isLoading = false;
-              }); // stop loading spinner
-              return http.Response("Error", 408); // return timeout response
-            },
-          );
+  try {
+    // Prepare URL
+    Uri url = Uri.parse(
+      "https://slumberjer.com/teaching/a251/locations.php?state=&category=&name=",
+    );
 
-      if (response.statusCode != 200) {
-        //if error happen
-        errorMessage = "Server Error: ${response.statusCode}"; //set error mes
-        // refresh ui
+    // GET request with timeout
+    var response = await http.get(url).timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        // If the API takes too long
+        errorMessage = "Connection Timeout. Please try again.";
+
         setState(() {
-          isLoading = false; // stop loading spinner
+          isLoading = false;
         });
 
-        return; // exit the function
-      }
+        return http.Response("Timeout", 408);
+      },
+    );
 
-      var decoded = json.decode(response.body); //convert json into dart
+    // If the server returns an error
+    if (response.statusCode != 200) {
+      errorMessage = "Server Error: ${response.statusCode}. Unable to connect. Please check your internet connection.";
 
-      if (decoded is List) {
-        places = []; //avoid duplicate data api
-        for (var element in decoded) {
-          //loop through json obj inside decode list
-          Place place = Place.fromJson(
-            element,
-          ); //convert json obj into place obj
-          places.add(place);
-        } //adding
-      } else {
-        errorMessage =
-            "Invalid data format."; //error msg display when api not return list
-      }
-    } on SocketException {
-      //handle error no internet connection
-      errorMessage = "No internet connection.";
-    } catch (e) {
-      //catch any errorhappen
-      errorMessage = "Error: $e";
+      setState(() {
+        isLoading = false;
+      });
+
+      return;
     }
 
-    setState(() {
-      //after finish loading,update ui
-      isLoading = false; // stop spinner after finishing
-    });
+    // Decode JSON response
+    var decoded = json.decode(response.body);
+
+    if (decoded is List) {
+      // Prevent duplicate data
+      places = [];
+
+      for (int i = 0; i < decoded.length; i++) {
+        var element = decoded[i];
+        Place place = Place.fromJson(element);
+        places.add(place);
+      }
+
+      if (places.isEmpty) {
+        errorMessage = "No data found.";
+      }
+    } else {
+      // Invalid format
+      errorMessage = "Invalid data format.";
+    }
+  } catch (e) {
+    // Generic connection or API failure
+    errorMessage = "Unable to connect. Please check your internet connection.";
   }
+
+  // Finish loading
+  setState(() {
+    isLoading = false;
+  });
+}
+
 
   String ratingLabel(double r) {
     //method convert num into label
