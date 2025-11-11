@@ -23,7 +23,7 @@ class Place {
     required this.rating,
   });
 
-  factory Place.fromJson(Map<String, dynamic> json) {
+  factory Place.fromJson(Map<String, dynamic> json) {//takes JSON from the API and converts it into a Place object
     double toDouble(dynamic v) {
       if (v == null) return 0.0;
       if (v is num) return v.toDouble();
