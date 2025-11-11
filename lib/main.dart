@@ -215,9 +215,7 @@ class _MyPlaceScreenState extends State<MyPlaceScreen> {
                                                         height: 15,
                                                       ),
                                                       Text("ID : ${p.id}"),
-                                                      Text(
-                                                        "Category : ${p.category}",
-                                                      ),
+                                                    
                                                       Text("State: ${p.state}"),
                                                       Text(
                                                         "Category: ${p.category}",
